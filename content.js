@@ -1,6 +1,8 @@
+let brow = chrome || browser;
+
 document.addEventListener('DOMContentLoaded', (e) => {
   console.debug('[XL] Reading SID from CRX storage');
-  chrome.storage.local
+  brow.storage.local
     .get(['sid', 'activeSid', 'usernames', 'settings'])
     .then(({ sid: sids, usernames, activeSid, settings }) => {
       if (!activeSid) {
@@ -8,7 +10,7 @@ document.addEventListener('DOMContentLoaded', (e) => {
       }
 
       const s = document.createElement('script');
-      s.src = chrome.runtime.getURL('inject.js');
+      s.src = brow.runtime.getURL('inject.js');
       s.dataset.sid = sids.length ? `1${sids[activeSid]}` : '0,null';
       s.dataset.activeSid = activeSid.toString();
       s.dataset.usernames = usernames?.join(',') || '';
@@ -31,7 +33,7 @@ window.addEventListener('load', (e) => {
   }
 
   if (userId) {
-    chrome.storage.local
+    brow.storage.local
       .set({
         userId,
       })
@@ -43,13 +45,13 @@ window.addEventListener('load', (e) => {
 
 window.addEventListener('xl-replit-change-active-sid', (e) => {
   console.debug('[XL] Changing active SID to', e.detail);
-  chrome.storage.local.get(['sid']).then(({ sid: sids }) => {
-    chrome.storage.local
+  brow.storage.local.get(['sid']).then(({ sid: sids }) => {
+    brow.storage.local
       .set({
         activeSid: e.detail,
       })
       .then(() => {
-        chrome.runtime.sendMessage(
+        brow.runtime.sendMessage(
           {
             type: 'change-active-sid',
             value: sids[e.detail],

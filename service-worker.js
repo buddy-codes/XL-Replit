@@ -1,8 +1,10 @@
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+let brow = chrome || browser;
+
+brow.runtime.onMessage.addListener((message, sender, sendResponse) => {
   const { type, value } = message;
 
   if (type === 'change-active-sid') {
-    chrome.cookies
+    brow.cookies
       .set({
         url: 'https://replit.com',
         httpOnly: true,

@@ -14,6 +14,8 @@ let settings = {
   'force-ssr': false,
 };
 
+let brow = chrome || browser;
+
 // URL consts
 const BACKEND = 'https://xl-replit-backend.luisafk.repl.co';
 
@@ -45,7 +47,7 @@ saveSidButton.addEventListener('click', (e) => {
         sidsCont.children[i].title = usernames[i];
       }
 
-      chrome.storage.local
+      brow.storage.local
         .set({
           sid: sids,
           usernames,
@@ -58,7 +60,7 @@ saveSidButton.addEventListener('click', (e) => {
 });
 
 // delButton.addEventListener('click', (e) => {
-//   chrome.storage.local
+//   brow.storage.local
 //     .set({
 //       sid: '',
 //     })
@@ -76,7 +78,7 @@ newSidButton.addEventListener('click', (e) => {
 });
 
 // get stored user ID, SID and settings
-chrome.storage.local
+brow.storage.local
   .get(['userId', 'sid', 'settings'])
   .then(({ userId: storedUserId, sid: sids, settings: storedSettings }) => {
     if (storedUserId) {
@@ -112,7 +114,7 @@ chrome.storage.local
       console.debug('[XL] Got settings from storage:', settings);
     } else {
       console.log('[XL] Found no stored settings, storing defaults');
-      chrome.storage.local
+      brow.storage.local
         .set({
           settings,
         })
@@ -148,7 +150,7 @@ settingsCont.addEventListener('input', (e) => {
 
   settings[key] = val;
 
-  chrome.storage.local
+  brow.storage.local
     .set({
       settings,
     })
